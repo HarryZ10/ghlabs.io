@@ -21,7 +21,7 @@ export type UpdateProfileData = {
     role_2?: string;
     notes?: string;
     social_links?: string[];
-    other_sites?: string[];
+    other_links?: string[];
     bio?: string;
 }
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import { toast } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { Upload } from "antd";
 import {
     MdAdd,
@@ -49,17 +49,17 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         const fetchUserData = async () => {
             try {
                 // console.log("Fetching data for primary endorser:", profile.usersEndorsedBy[0]);
-                const data = await usersSDK.getUserByGameheadsId(profile.usersEndorsedBy[0]);
-                // console.log("Data is ", data)
+                const data = await usersSDK.getUserByGameheadsId(profile.users_endorsed_by[0]);
+                console.log("Endorser is ", data)
                 setPrimaryEndorser(data);
             } catch (error) {
-                console.error("Failed to fetch data for primary endorser:", error);
+                console.log("Failed to fetch data for primary endorser:", error);
                 setPrimaryEndorser({ gameheadsID: '000000', full_name: 'Unknown' })
             }
         };
 
         fetchUserData();
-    }, [profile.gameheadsId, profile.usersEndorsedBy]); // Re-run this effect if traceId changes
+    }, [profile.gameheadsID, profile.users_endorsed_by]);
 
     // const { startUpload } = useUploadThing("imageUploader", {
     //     onClientUploadComplete: () => {
@@ -126,8 +126,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                     //             absolute
                                     //             bottom-10
                                     //             right-2
-                                    //             bg-trace_green-500
-                                    //             hover:bg-trace_green-400
+                                    //             bg-gh_green-500
+                                    //             hover:bg-gh_green-400
                                     //             hover:bg-opacity-90
                                     //             hover:shadow-sm
                                     //             text-white
@@ -154,11 +154,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                 editable={!editable ? false : {
                                     onChange: async (updatedName: string) => {
                                         usersSDK.updateProfile({ full_name: updatedName, email: profile.email });
-                                        setProfile({ ...profile, fullName: updatedName });
+                                        setProfile({ ...profile, full_name: updatedName });
                                     }
                                 }}
                             >
-                                {profile.fullName}
+                                {profile.full_name}
                             </Title>
                         </div>
                         <div className="flex flex-col sm:grid sm:grid-cols-12 sm:gap-10">
@@ -184,19 +184,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                     <div className="flex flex-row items-center gap-2">
                                         {/* <Tooltip text="Your unique identifier" position="top"> */}
                                         <p className="text-xs sm:text-sm text-links">
-                                            TRACE ID - #{profile.gameheadsID}
+                                            GH ID - #{profile.gameheadsID}
                                         </p>
                                         {/* </Tooltip> */}
                                         {editable &&
                                             <div className="cursor-pointer mx-1">
-                                                <a href={`profiles/0x${profile.traceId}`} target="_blank">
+                                                <a href={`profiles/0x${profile.gameheadsID}`} target="_blank">
                                                     <EyeOutlined />
                                                 </a>
                                             </div>
                                         }
                                         <div className="cursor-pointer mx-1"
                                             onClick={(e) => {
-                                                navigator.clipboard.writeText(`https://ghlabs.io/profiles/0x${profile.traceId}`);
+                                                navigator.clipboard.writeText(`https://ghlabs.io/profiles/0x${profile.gameheadsID}`);
                                                 // toast.success("Public link copied to clipboard.");
                                             }}
                                         >
@@ -226,7 +226,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                     <div className="hidden sm:block">
                                
                                         <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                                            {profile?.other_sites.map((item: any) => (
+                                            {profile?.other_links.map((item: any) => (
                                                 <a
                                                     key={item.url}
                                                     target="_blank"
@@ -274,7 +274,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
                             </div>
                             <div className="col-span-5 sm:col-span-4">
-                                <div className="bg-trace_green-50 rounded-md px-4 py-3.5 text-center sm:text-left">
+                                <div className="bg-gh_green-50 rounded-md px-4 py-3.5 text-center sm:text-left">
                                     <p className="text-xs sm:text-sm text-caption">Endorsed by</p>
                                     <div
                                         className="
@@ -284,8 +284,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                             text-sm sm:text-base
                                             text-center sm:text-left
                                     ">
-                                        <span className="text-headings"><strong>{primaryEndorser.profile && primaryEndorser.profile.fullName}</strong></span>
-                                        <a href={`https://app.traceyours.com/profiles/0x${primaryEndorser.profile && primaryEndorser.profile.traceId}`}><span className="text-links">TRACE ID: #{primaryEndorser.profile && primaryEndorser.profile.traceId}</span></a>
+                                        <span className="text-headings"><strong>{primaryEndorser.profile && primaryEndorser.profile.full_name}</strong></span>
+                                        <a href={`https://ghlabs.io/profiles/0x${primaryEndorser.profile && primaryEndorser.profile.gameheadsID}`}><span className="text-links">GH ID: #{primaryEndorser.profile && primaryEndorser.profile.gameheadsID}</span></a>
                                     </div>
                                 </div>
                                 <div className="mt-2 text-sm rounded-md py-0 sm:py-3 sm:text-left text-center flex flex-col">
@@ -323,7 +323,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                         </div>
                         <div className="sm:hidden">
                             <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                                {profile.other_sites.map((item: any) => (
+                                {profile.other_links.map((item: any) => (
                                     <a
                                         key={item.url}
                                         target="_blank"

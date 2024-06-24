@@ -27,7 +27,7 @@ const SignIn = () => {
                     Gameheads Labs is a space for students to showcase their projects and connect with others across sites.
                 </p>
                 <Button
-                    className="bg-trace_green-500"
+                    className="bg-gh_green-500"
                     type="primary"
                     size="large"
                     icon={<GoogleOutlined />}

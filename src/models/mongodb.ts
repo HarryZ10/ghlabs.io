@@ -22,7 +22,9 @@ async function getUniqueIdentifier(usersCollection: any) {
 }
 
 // Singleton instance for the MongoDB client
-let clientInstance: MongoClient;
+let clientInstance: MongoClient | null = null;
+let dbInstance: Db | null = null;
+
 
 // Implement connection pooling
 async function getClientInstance() {
@@ -33,26 +35,47 @@ async function getClientInstance() {
                 strict: true,
                 deprecationErrors: true,
             },
+            maxIdleTimeMS: 30000,
+            maxPoolSize: 20,
+            minPoolSize: 5,
         });
 
-        // Connect only once
-        await clientInstance.connect();
+        try {
+            await clientInstance.connect();
+
+            // Add SIGINT handler
+            process.on('SIGINT', async () => {
+                if (clientInstance) {
+                    await clientInstance.close();
+                    console.log('MongoDB connection closed');
+                }
+                process.exit(0);
+            });
+
+        } catch (error) {
+            console.error('Failed to connect to MongoDB', error);
+            clientInstance = null;
+            throw error;
+        }
     }
     return clientInstance;
 }
 
 export async function connectToDatabase() {
     const client = await getClientInstance();
-    const traceDb: Db = client.db('Cluster0');
-    return { traceDb, client };
+
+    if (!dbInstance) {
+        dbInstance = client.db('Cluster0');
+    }
+    return { gameheadsDB: dbInstance, client };
 }
 
 // for google auth - checks if user exists, if not, creates user
 export async function getUserFromToken(token: any) {
 
     // get or create user from email
-    const { traceDb } = await connectToDatabase();
-    const usersCollection = traceDb.collection('dev');
+    const { gameheadsDB } = await connectToDatabase();
+    const usersCollection = gameheadsDB.collection('dev');
     const uniqueId = await getUniqueIdentifier(usersCollection);
 
     if (!token.email || token.email.length === 0) {
@@ -107,8 +130,8 @@ export async function getUserFromToken(token: any) {
 
 // for use after endorsement - checks if user exists, if not, creates user
 export async function createUserFromEndorsement(email: string, endorserId: string) {
-    const { traceDb } = await connectToDatabase();
-    const usersCollection = traceDb.collection('dev');
+    const { gameheadsDB } = await connectToDatabase();
+    const usersCollection = gameheadsDB.collection('dev');
     const uniqueId = await getUniqueIdentifier(usersCollection);
 
     if (!email || email.length === 0) {
@@ -143,8 +166,8 @@ export async function createUserFromEndorsement(email: string, endorserId: strin
 }
 
 export async function getUserList() {
-    const { traceDb } = await connectToDatabase();
-    const usersCollection = traceDb.collection('dev');
+    const { gameheadsDB } = await connectToDatabase();
+    const usersCollection = gameheadsDB.collection('dev');
     const users = await usersCollection.find().toArray();
     return users.map((user: any) => {
         return {

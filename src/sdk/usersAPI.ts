@@ -23,8 +23,8 @@ const updateUsername = async (username: string) => {
     });
 }
 
-const getUserByGameheadsId = async (gameheadsId: string) => {
-    const res = await fetch(`${USERS_API_ENDPOINT}/gameheadsId/${gameheadsId}`);
+const getUserByGameheadsId = async (gameheadsID: string) => {
+    const res = await fetch(`${USERS_API_ENDPOINT}/gameheadsID/${gameheadsID}`);
     return res.json();
 }
 const getUserList = async () => {

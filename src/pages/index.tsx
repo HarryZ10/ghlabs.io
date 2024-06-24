@@ -1,3 +1,5 @@
+// src/pages/index.tsx
+
 import { useState, useEffect } from "react";
 import { Page } from "../models/models";
 import { useSession } from "next-auth/react";
@@ -8,6 +10,7 @@ import { useGameheadsContext } from "../context/context";
 import usersSDK from "../sdk/usersAPI";
 import SignIn from "./SignIn";
 import Dashboard from "./Dashboard";
+import PresentationQueue from "../components/PresentationQueue";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,14 +40,6 @@ export default function Home() {
     }
   }, [session, setIsLoggedIn, setUser]);
 
-  // const getClaims = async () => {
-  //   const res = await claimsApi.getUserClaims();
-  //   const data = await res.json();
-  //   if (data.claims) {
-  //     setClaims(data.claims);
-  //   }
-  // };
-
   return (
     <main>
       <div className="w-full">
@@ -55,7 +50,7 @@ export default function Home() {
           <>
             {currentPage === Page.Dashboard && <Dashboard projects={projects} user={user} getProjects={async () => {}}/>}
             {currentPage === Page.NewProject && <></>}
-            {currentPage === Page.PresentationQueue && <></>}
+            {currentPage === Page.PresentationQueue && <PresentationQueue user={user} />}
           </>
         )}
       </div>

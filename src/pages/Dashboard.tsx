@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ProfileView } from '../components/ProfileView';
 import AccessRestricted from '../components/utilities/AccessRestricted';
+import { set } from 'mongoose';
 
 const Dashboard = ({ projects, user, getProjects }: { getProjects: any, projects: any, user: any }) => {
     const [profile, setProfile] = useState<any>(null);
@@ -12,10 +13,10 @@ const Dashboard = ({ projects, user, getProjects }: { getProjects: any, projects
             setProfile(user.profile);
         } else {
             setProfile({
-                full_name: user?.data?.username ?? 'Insert your name',
-                email: 'Insert your email',
+                full_name: user?.profile?.full_name ?? '',
+                email: '',
                 gameheadsID: '',
-                bio: 'Insert your bio',
+                bio: '',
                 profile_picture: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                 social_links: [],
                 projects: [],
@@ -34,7 +35,7 @@ const Dashboard = ({ projects, user, getProjects }: { getProjects: any, projects
 
     // Only render once profile is not null and claims are available
     if (!profile || !projects) {
-        return <div>Loading...</div>; // Replace with your preferred loading indicator
+        return <div>Loading...</div>;
     }
 
     return (
@@ -42,7 +43,7 @@ const Dashboard = ({ projects, user, getProjects }: { getProjects: any, projects
             {profile.users_endorsed_by.length > 0 ?
                 <ProfileView editable={true} setProfile={setProfile} profile={profile} projects={projects} />
                 :
-                <AccessRestricted />}
+                <ProfileView editable={false} setProfile={setProfile} profile={profile} projects={projects} />}
         </div>
     );
 };

@@ -1,6 +1,4 @@
-// import { getUser } from "../oldauth/[...thirdweb]";
 import { NextApiRequest, NextApiResponse } from "next";
-import { User } from "../../../models/models";
 import { connectToDatabase, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
@@ -55,9 +53,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             const body = req.body;
             const {
-                fullName,
+                full_name,
+                bio,
                 email,
-                teamId,
+                currentTeamId,
+                currentTeamName,
                 pronouns,
                 siteName,
                 ghLevel,
@@ -69,47 +69,38 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 notes
             } = body;
 
-            const { traceDb } = await connectToDatabase();
-            const usersCollection = traceDb.collection('users');
+            const { gameheadsDB } = await connectToDatabase();
+            const usersCollection = gameheadsDB.collection('dev');
             const userObj = await usersCollection.findOne({ email: user.email });
-
-            if (!userObj || !userObj.profile?.fullName) {
+            
+            if (!userObj || !userObj.full_name) {
                 return res.status(401).json({
                     message: "Not authorized.",
                 });
             }
 
-            const currentProfile = userObj.profile || new User({
-                email: "",
-                full_name: "",
-                team_id: "",
-                pronouns: "",
-                site_name: "",
-                gh_level: "",
-                color_1: "",
-                color_2: "",
-                contacts_more_info: "",
-                role_1: "",
-                role_2: "",
-                notes: ""
-            });
+            const currentProfile = userObj;
 
-            const newProfile = new User({
+            const newProfile = {
                 email: email || currentProfile.email,
-                full_name: fullName || currentProfile.full_name,
-                team_id: teamId || currentProfile.team_id,
+                bio: bio || currentProfile.bio,
+                full_name: full_name || currentProfile.full_name,
+                currentTeamId: currentTeamId || currentProfile.currentTeamId,
+                currentTeamName: currentTeamName || currentProfile.currentTeamName,
                 pronouns: pronouns || currentProfile.pronouns,
-                site_name: siteName || currentProfile.site_name,
-                gh_level: ghLevel || currentProfile.gh_level,
-                color_1: color1 || currentProfile.color_1,
-                color_2: color2 || currentProfile.color_2,
-                contacts_more_info: contactsMoreInfo || currentProfile.contacts_more_info,
-                role_1: role1 || currentProfile.role_1,
-                role_2: role2 || currentProfile.role_2,
+                site: siteName || currentProfile.site,
+                level: ghLevel || currentProfile.level,
+                color1: color1 || currentProfile.color1,
+                color2: color2 || currentProfile.color2,
+                contacts: contactsMoreInfo || currentProfile.contacts,
+                role1: role1 || currentProfile.role1,
+                role2: role2 || currentProfile.role2,
                 notes: notes || currentProfile.notes
-            });
+            };
 
-            await usersCollection.updateOne({ email: user.email }, { $set: { profile: newProfile } });
+            console.log("NEW PROFILE:", newProfile);
+
+            await usersCollection.updateOne({ email: user.email }, { $set: { ...newProfile } });
 
             return res.status(200).json({
                 message: `Updated profile for ${user.email}.`,
