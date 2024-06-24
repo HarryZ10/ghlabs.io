@@ -37,8 +37,10 @@ const options = {
         deprecationErrors: true,
     },
     maxPoolSize: 100,
-    maxIdleTimeMS: 10000,
-    minPoolSize: 20,
+     minPoolSize: 20,
+    maxIdleTimeMS: 30000,
+    connectTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
 };
 if (process.env.NODE_ENV === "development") {
     // In development mode, use a global variable
