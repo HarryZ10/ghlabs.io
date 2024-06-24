@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase, getUserFromToken } from '../../../models/mongodb';
+import { getCollection, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -58,9 +58,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 email,
                 currentTeamId,
                 currentTeamName,
+                queueColor,
                 pronouns,
-                siteName,
-                ghLevel,
+                site,
+                level,
                 color1,
                 color2,
                 contactsMoreInfo,
@@ -69,10 +70,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 notes
             } = body;
 
-            const { gameheadsDB } = await connectToDatabase();
-            const usersCollection = gameheadsDB.collection('dev');
-            const userObj = await usersCollection.findOne({ email: user.email });
-            
+            const usersCollection = await getCollection("dev");            
+            const userObj = await usersCollection.findOne({ email: token.email });
+
             if (!userObj || !userObj.full_name) {
                 return res.status(401).json({
                     message: "Not authorized.",
@@ -88,22 +88,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 currentTeamId: currentTeamId || currentProfile.currentTeamId,
                 currentTeamName: currentTeamName || currentProfile.currentTeamName,
                 pronouns: pronouns || currentProfile.pronouns,
-                site: siteName || currentProfile.site,
-                level: ghLevel || currentProfile.level,
+                site: site || currentProfile.site,
+                level: level || currentProfile.level,
                 color1: color1 || currentProfile.color1,
                 color2: color2 || currentProfile.color2,
                 contacts: contactsMoreInfo || currentProfile.contacts,
                 role1: role1 || currentProfile.role1,
                 role2: role2 || currentProfile.role2,
-                notes: notes || currentProfile.notes
+                notes: notes || currentProfile.notes,
+                queueColor: queueColor || currentProfile.queueColor,
+                last_login_at: Date.now(),
+                is_new_user: false,
             };
 
             console.log("NEW PROFILE:", newProfile);
 
-            await usersCollection.updateOne({ email: user.email }, { $set: { ...newProfile } });
+            await usersCollection.updateOne({ email: token.email }, { $set: { ...newProfile } });
 
             return res.status(200).json({
-                message: `Updated profile for ${user.email}.`,
+                message: `Updated profile for ${token.email}.`,
             });
 
         } catch (error) {

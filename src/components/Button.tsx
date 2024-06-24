@@ -9,6 +9,7 @@ export interface ButtonProps {
     altPurpose?: string;
     small?: boolean;
     icon?: IconType;
+    iconPos?: 'left' | 'right'; // limit iconPos to 'left' or 'right'
     href?: string;
 }
 
@@ -21,10 +22,11 @@ const Button: React.FC<ButtonProps> = ({
     altPurpose,
     small,
     icon: Icon,
+    iconPos = 'left', // default to left if no pos provided
     href,
 }) => {
     const buttonContent = (
-        <div className="flex flex-row items-center gap-1">
+        <div className={`flex flex-row items-center gap-1 ${iconPos === 'right' ? 'flex-row-reverse' : ''}`}>
             {Icon && <Icon size={16} />}
             {label}
         </div>

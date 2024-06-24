@@ -1,7 +1,7 @@
 // src/pages/api/queue/save.ts
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { getUserFromToken, connectToDatabase } from '../../../models/mongodb';
+import { getCollection, getConnectedClient, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
 function isGameheadsEmail(email: string) {
@@ -16,27 +16,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(401).json({ message: "Not authorized. You must sign in." });
         }
 
-        const user = await getUserFromToken(token);
+        const user: any = await getUserFromToken(token);
         if (!user || !isGameheadsEmail(user.email)) {
             return res.status(401).json({ message: "Not authorized. You are not an administrator." });
         }
 
         const { date } = req.body;
-        const { gameheadsDB, client } = await connectToDatabase();
+        const usersCollection = await getCollection("dev");
+        const queueCollection = await getCollection("queue");
+        const savedQueuesCollection = await getCollection("savedQueues")
+        const sessionsCollection = await getCollection("sessions");
+        
+        const client = await getConnectedClient();
 
         const session = client.startSession();
         try {
             await session.withTransaction(async () => {
-                const queue = await gameheadsDB.collection('queue').find({}, { session }).toArray();
-                await gameheadsDB.collection('savedQueues').insertOne({ date, queue }, { session });
+                const queue = await queueCollection.find({}, { session }).toArray();
+                await savedQueuesCollection.insertOne({ date, queue }, { session });
 
-                await gameheadsDB.collection('sessions').updateOne(
+                await sessionsCollection.updateOne(
                     { endDate: null },
                     { $set: { endDate: new Date() } },
                     { session }
                 );
 
-                await gameheadsDB.collection('queue').deleteMany({}, { session });
+                await queueCollection.deleteMany({}, { session });
             });
 
             return res.status(200).json({ message: 'Queue saved and session ended successfully' });

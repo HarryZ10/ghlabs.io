@@ -1,7 +1,7 @@
 // src/pages/api/queue/join.ts
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDatabase, getUserFromToken } from '../../../models/mongodb';
+import { getCollection, getConnectedClient, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,30 +12,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(401).json({ message: "Not authorized. You must sign in." });
         }
 
-        const user = await getUserFromToken(token);
+        const user: any = await getUserFromToken(token);
         if (!user) {
             return res.status(401).json({ message: "User not found." });
         }
 
-        const { gameheadsDB, client } = await connectToDatabase();
-
+        const usersCollection = await getCollection("dev");
+        const sessionsCollection = await getCollection("sessions")
+        const queueCollection = await getCollection("queue");
+        const client = await getConnectedClient();
         const session = client.startSession();
+
         try {
             await session.withTransaction(async () => {
 
                 // Check if there's an active session
-                const activeSession = await gameheadsDB.collection('sessions').findOne({ endDate: null }, { session });
+                const activeSession = await sessionsCollection.findOne({ endDate: null }, { session });
                 if (!activeSession) {
                     throw new Error("Please wait for a session to start.");
                 }
 
-                const devUser = await gameheadsDB.collection('dev').findOne({ email: user.email }, { session });
+                const devUser = await usersCollection.findOne({ email: user?.email }, { session });
                 if (!devUser || !devUser.currentTeamId || !devUser.currentTeamName || !devUser.queueColor) {
                     throw new Error("You must be assigned to a team with a valid name and queue color before joining the queue.");
                 }
 
                 // Check if the team is already in the queue
-                const existingQueueItem = await gameheadsDB.collection('queue').findOne(
+                const existingQueueItem = await queueCollection.findOne(
                     { currentTeamId: devUser.currentTeamId },
                     { session }
                 );
@@ -45,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
                 // Insert the new queue item
-                const result = await gameheadsDB.collection('queue').insertOne({
+                const result = await queueCollection.insertOne({
                     currentTeamId: devUser.currentTeamId,
                     currentTeamName: devUser.currentTeamName,
                     timestamp: new Date(),

@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             });
         }
 
-        const user = await getUserFromToken(token);
+        const user: any = await getUserFromToken(token);
 
         if (!isGameheadsEmail(user?.email)) {
             return res.status(401).json({

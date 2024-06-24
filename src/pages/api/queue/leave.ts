@@ -1,7 +1,7 @@
 // src/pages/api/queue/leave.ts
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDatabase, getUserFromToken } from '../../../models/mongodb';
+import { getCollection, getConnectedClient, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,22 +12,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(401).json({ message: "Not authorized. You must sign in." });
         }
 
-        const user = await getUserFromToken(token);
+        const user: any = await getUserFromToken(token);
         if (!user) {
             return res.status(401).json({ message: "User not found." });
         }
 
-        const { gameheadsDB, client } = await connectToDatabase();
-
+        const usersCollection = await getCollection("dev");
+        const queueCollection = await getCollection("queue");
+        const client = await getConnectedClient();
         const session = client.startSession();
+
         try {
             await session.withTransaction(async () => {
-                const devUser = await gameheadsDB.collection('dev').findOne({ email: user.email }, { session });
+                const devUser = await usersCollection.findOne({ email: user.email }, { session });
                 if (!devUser || !devUser.currentTeamId || !devUser.queueColor) {
                     throw new Error("You are not assigned to a team or don't have a queue color.");
                 }
                 
-                const result = await gameheadsDB.collection('queue').findOneAndDelete(
+                const result = await queueCollection.findOneAndDelete(
                     { currentTeamId: devUser.currentTeamId, queueColor: devUser.queueColor },
                     { session }
                 );

@@ -6,23 +6,28 @@ export enum Page {
     NewProject,
     ProjectIdentity,
     SignIn,
+    IdentityCenter,
+    Onboarding,
 }
 
 export type UpdateProfileData = {
-    email: string;
     full_name?: string;
     pronouns?: string;
-    site_name?: string;
-    gh_level?: string;
-    color_1?: string;
-    color_2?: string;
-    contacts_more_info?: string;
-    role_1?: string;
-    role_2?: string;
+    site?: string;
+    level?: string;
+    color1?: string;
+    color2?: string;
+    discord?: string;
+    phone_number?: string;
+    role1?: string;
+    role2?: string;
     notes?: string;
     social_links?: string[];
     other_links?: string[];
     bio?: string;
+    queueColor?: string;
+    currentTeamId?: number;
+    currentTeamName?: string;
 }
 
 export type SectionType = {

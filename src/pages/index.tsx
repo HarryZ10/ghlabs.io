@@ -10,14 +10,16 @@ import { useGameheadsContext } from "../context/context";
 import usersSDK from "../sdk/usersAPI";
 import SignIn from "./SignIn";
 import Dashboard from "./Dashboard";
-import PresentationQueue from "../components/PresentationQueue";
+import PresentationQueue from "./PresentationQueue";
+import IdentityCenter from "./IdentityCenter";
+import Onboard from "./Onboard";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { data: session } = useSession();
   const [projects, setProjects] = useState<any>([]);
-  
+
   const {
     setCurrentPage,
     currentPage,
@@ -40,19 +42,32 @@ export default function Home() {
     }
   }, [session, setIsLoggedIn, setUser]);
 
+  const renderContent = () => {
+    if (!isLoggedIn) {
+      return <SignIn />;
+    }
+
+    if (user && user.profile.is_new_user) {
+      return <Onboard setCurrentPage={setCurrentPage}/>;
+    }
+
+    switch (currentPage) {
+      case Page.Dashboard:
+        return <Dashboard projects={projects} user={user} getProjects={async () => { }} />;
+      case Page.IdentityCenter:
+        return <IdentityCenter user={user} />;
+      case Page.PresentationQueue:
+        return <PresentationQueue user={user} />;
+      default:
+        return <Dashboard projects={projects} user={user} getProjects={async () => { }} />;
+    }
+  };
+
   return (
     <main>
       <div className="w-full">
         <Navbar user={user} isLoggedIn={isLoggedIn} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        {!isLoggedIn ? (
-          <SignIn />
-        ) : (
-          <>
-            {currentPage === Page.Dashboard && <Dashboard projects={projects} user={user} getProjects={async () => {}}/>}
-            {currentPage === Page.NewProject && <></>}
-            {currentPage === Page.PresentationQueue && <PresentationQueue user={user} />}
-          </>
-        )}
+        {renderContent()}
       </div>
     </main>
   );

@@ -6,7 +6,8 @@ import {
     MenuOutlined,
     CloseOutlined,
     HomeOutlined,
-    UserOutlined
+    UserOutlined,
+    FundProjectionScreenOutlined,
 } from '@ant-design/icons';
 
 import { MdLogout } from "react-icons/md";
@@ -76,7 +77,13 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, isLoggedIn
                                     className="ml-8 whitespace-nowrap text-base font-medium text-black hover:text-gray-500"
                                     onClick={() => handleMenuItemClick(Page.PresentationQueue)}
                                 >
-                                    <UserOutlined className="mr-2 py-1 align-middle" />Demo Day
+                                    <FundProjectionScreenOutlined className="mr-2 py-1 align-middle" />Demo Day
+                                </button>
+                                <button
+                                    className="ml-8 whitespace-nowrap text-base font-medium text-black hover:text-gray-500"
+                                    onClick={() => handleMenuItemClick(Page.IdentityCenter)}
+                                >
+                                    <UserOutlined className="mr-2 py-1 align-middle" />Identity Center
                                 </button>
                                 <button
                                     className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-black bg-cream hover:bg-white"
@@ -126,8 +133,15 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, setCurrentPage, isLoggedIn
                                         className="-m-3 p-3 flex items-center rounded-md"
                                         onClick={() => handleMenuItemClick(Page.PresentationQueue)}
                                     >
-                                        <UserOutlined className="flex-shrink-0 h-6 w-6 text-gray-800" />
+                                        <FundProjectionScreenOutlined className="flex-shrink-0 h-6 w-6 text-gray-800" />
                                         <span className="ml-3 text-base font-medium text-gray-700">Demo Day</span>
+                                    </button>
+                                    <button
+                                        className="-m-3 p-3 flex items-center rounded-md"
+                                        onClick={() => handleMenuItemClick(Page.IdentityCenter)}
+                                    >
+                                        <FundProjectionScreenOutlined className="flex-shrink-0 h-6 w-6 text-gray-800" />
+                                        <span className="ml-3 text-base font-medium text-gray-700">Identity Center</span>
                                     </button>
                                     <button
                                         className="-m-3 p-3 flex items-center rounded-md"

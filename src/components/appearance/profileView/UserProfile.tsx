@@ -82,7 +82,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                             <div className="relative w-full sm:w-auto">
                                 <div className="absolute bottom-0 mx-auto sm:mx-0 translate-y-16 w-max left-0 right-0 sm:translate-x-0 sm:left-0">
 
-                                    <Avatar size={140} src={profile.profilePicture} />
+                                    <Avatar size={140} src={profile.profile_picture} />
                                     {editable ? (
                                     //     <Upload
                                     //     name="avatar"

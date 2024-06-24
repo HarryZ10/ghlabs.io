@@ -1,7 +1,7 @@
 // src/pages/api/queue/startSession.ts
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { getUserFromToken, connectToDatabase } from '../../../models/mongodb';
+import { getCollection, getConnectedClient, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
 function isGameheadsEmail(email: string) {
@@ -16,22 +16,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(401).json({ message: "Not authorized. You must sign in." });
         }
 
-        const user = await getUserFromToken(token);
+        const user: any = await getUserFromToken(token);
         if (!user || !isGameheadsEmail(user.email)) {
             return res.status(401).json({ message: "Not authorized. You are not an administrator." });
         }
 
-        const { gameheadsDB, client } = await connectToDatabase();
-
+        const sessionsCollection = await getCollection("sessions");
+        const client = await getConnectedClient();
         const session = client.startSession();
+
         try {
             await session.withTransaction(async () => {
-                const activeSession = await gameheadsDB.collection('sessions').findOne({ endDate: null }, { session });
+                const activeSession = await sessionsCollection.findOne({ endDate: null }, { session });
                 if (activeSession) {
                     throw new Error('A session is already in progress');
                 }
 
-                await gameheadsDB.collection('sessions').insertOne({ startDate: new Date(), endDate: null }, { session });
+                await sessionsCollection.insertOne({ startDate: new Date(), endDate: null }, { session });
             });
 
             return res.status(200).json({ message: 'Session started successfully' });

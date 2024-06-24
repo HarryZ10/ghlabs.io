@@ -27,8 +27,14 @@ const getUserByGameheadsId = async (gameheadsID: string) => {
     const res = await fetch(`${USERS_API_ENDPOINT}/gameheadsID/${gameheadsID}`);
     return res.json();
 }
+
 const getUserList = async () => {
     const res = await fetch(`${USERS_API_ENDPOINT}/list`);
+    return res.json();
+}
+
+const getTeams = async () => {
+    const res = await fetch("/api/teams");
     return res.json();
 }
 
@@ -48,7 +54,8 @@ const usersSDK = {
     updateUsername,
     getUserByGameheadsId,
     updateProfile,
-    getUserList
+    getUserList,
+    getTeams
 };
 
 export default usersSDK;

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { MdExitToApp, MdGroup, MdPlayArrow, MdSave } from 'react-icons/md';
 import toast from 'react-hot-toast';
-import QueueActions from './QueueActions';
+import QueueActions from '../components/QueueActions';
 interface PresentationQueueProps {
     user: any;
 }
@@ -35,7 +35,7 @@ const PresentationQueue: React.FC<PresentationQueueProps> = ({ user }) => {
         const intervalId = setInterval(() => {
             fetchQueues();
             checkSessionStatus();
-        }, 5000);
+        }, 1000);
         return () => clearInterval(intervalId);
     }, []);
 

@@ -1,12 +1,16 @@
 // src/pages/api/queue/sessionStatus.ts
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { connectToDatabase } from '../../../models/mongodb';
+import { getCollection, getConnectedClient } from '../../../models/mongodb';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
-        const { gameheadsDB } = await connectToDatabase();
-        const activeSession = await gameheadsDB.collection('sessions').findOne({ endDate: null });
+        
+        const sessionsCollection = await getCollection("sessions");
+        const client = await getConnectedClient();
+        const session = client.startSession();
+        
+        const activeSession = await sessionsCollection.findOne({ endDate: null });
 
         return res.status(200).json({ sessionStarted: !!activeSession });
     } else {
