@@ -69,8 +69,7 @@ const IdentityCenter = ({ user }: { user: any }) => {
         users_endorsed_by: user?.users_endorsed_by ?? []
     };
 
-    // console.log(user)
-    const [profile, setProfile] = useState(user.profile || userProfile);
+    const [profile, setProfile] = useState(user?.profile || userProfile);
 
     return (
         <div className="mx-0 sm:mx-28 sm:my-10 shadow-md sm:rounded-md">

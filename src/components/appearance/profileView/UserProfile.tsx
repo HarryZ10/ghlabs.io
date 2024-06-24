@@ -153,7 +153,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                 className='profile-name text-2xl sm:text-3xl font-bold mt-14 mb-0 text-center sm:text-left'
                                 editable={!editable ? false : {
                                     onChange: async (updatedName: string) => {
-                                        usersSDK.updateProfile({ full_name: updatedName, email: profile.email });
+                                        usersSDK.updateProfile({ full_name: updatedName });
                                         setProfile({ ...profile, full_name: updatedName });
                                     }
                                 }}
@@ -209,7 +209,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                         className='profile-bio'
                                         editable={!editable ? false : {
                                             onChange: async (updatedBio) => {
-                                                usersSDK.updateProfile({ bio: updatedBio, email: profile.email});
+                                                usersSDK.updateProfile({ bio: updatedBio });
                                                 setProfile({ ...profile, bio: updatedBio });
                                             }
                                         }}
