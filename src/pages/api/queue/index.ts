@@ -3,6 +3,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getCollection, getConnectedClient } from '../../../models/mongodb';
 
+export const config = {
+    maxDuration: 10,
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
         const queueCollection = await getCollection("queue");

@@ -6,6 +6,10 @@ function isGameheadsEmail(email: string) {
     return email.endsWith("@gameheadsoakland.org") || email.endsWith('harryzhu11@gmail.com');
 }
 
+export const config = {
+    maxDuration: 10,
+};
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (req.method === 'GET') {

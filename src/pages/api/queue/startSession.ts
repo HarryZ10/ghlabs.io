@@ -4,6 +4,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection, getConnectedClient, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
+export const config = {
+    maxDuration: 10,
+};
+
 function isGameheadsEmail(email: string) {
     return email.endsWith("@gameheadsoakland.org") || email === 'harryzhu11@gmail.com';
 }

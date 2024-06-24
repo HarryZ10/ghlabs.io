@@ -16,6 +16,10 @@ interface ResponseBody {
     user?: { [key: string]: any };
 }
 
+export const config = {
+    maxDuration: 10,
+};
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let response: {
         status: number;

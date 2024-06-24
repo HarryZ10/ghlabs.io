@@ -4,6 +4,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getCollection, getConnectedClient, getUserFromToken } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
+export const config = {
+    maxDuration: 10,
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         const token = await getToken({ req });

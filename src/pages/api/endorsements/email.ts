@@ -14,6 +14,10 @@ interface EmailRequestBody {
     html: string;
 }
 
+export const config = {
+    maxDuration: 10,
+};
+
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     if (req.method === 'POST') {
         const { to, subject, html }: EmailRequestBody = req.body;
