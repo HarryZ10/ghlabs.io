@@ -131,6 +131,20 @@ const PresentationQueue: React.FC<PresentationQueueProps> = ({ user }) => {
 
     const isUserInQueue = Object.values(queues).flat().some(item => item.currentTeamId === user.profile.currentTeamId);
 
+    const renderAgendaInfo = () => (
+        <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-md">
+            <h2 className="text-xl font-bold mb-4">Presentation Guidelines</h2>
+            <ul className="list-disc pl-5 space-y-2">
+                <li>4-minute presentation (1-2 min warning, strict cutoff)</li>
+                <li>Q&A with the Board follows</li>
+                <li>All presentations are recorded</li>
+                <li>Ensure all team members have slide access and participate</li>
+                <li>Team leads coordinate queue positions</li>
+                <li>Respectfully attend all team presentations</li>
+            </ul>
+        </div>
+    );
+
     const renderQueue = (color: string, location: string) => (
         <div key={color} className="mb-8">
             <h2 className="text-xl font-bold mb-4 capitalize">{color} - {location}</h2>
@@ -176,6 +190,8 @@ const PresentationQueue: React.FC<PresentationQueueProps> = ({ user }) => {
                     startSession={startSession}
                     saveQueue={saveQueue}                
                 />
+
+                {renderAgendaInfo()}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {queueConfigs.map(config => renderQueue(config.color, config.location))}
