@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from '../../../../models/mongodb';
+import { getToken } from "next-auth/jwt";
 
 export const config = {
     maxDuration: 10,
@@ -7,6 +8,20 @@ export const config = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'GET') {
+
+        const token = await getToken({ req });
+
+        if (!token) {
+            return res.status(401).json({
+                message: "Not authorized 1.",
+            });
+        }
+        if (!token?.email) {
+            return res.status(401).json({
+                message: "Not authorized 2.",
+            });
+        }
+
         console.log(`Getting profile for ${req.query.gameheadsID}`);
         if (!req.query.gameheadsID) {
             return res.status(400).json({ message: 'Missing gameheads ID' });

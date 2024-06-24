@@ -24,7 +24,7 @@ const updateUsername = async (username: string) => {
 }
 
 const getUserByGameheadsId = async (gameheadsID: string) => {
-    const res = await fetch(`${USERS_API_ENDPOINT}/gameheadsID/${gameheadsID}`);
+    const res = await fetch(`${USERS_API_ENDPOINT}/gameheadsID/${gameheadsID}?gameheadsID=${gameheadsID}`);
     return res.json();
 }
 
