@@ -13,6 +13,7 @@ import Dashboard from "./Dashboard";
 import PresentationQueue from "./PresentationQueue";
 import IdentityCenter from "./IdentityCenter";
 import Onboard from "./Onboard";
+import AccessRestricted from "../components/utilities/AccessRestricted";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,6 +44,11 @@ export default function Home() {
   }, [session, setIsLoggedIn, setUser]);
 
   const renderContent = () => {
+
+    if (user && user.profile.users_endorsed_by.length === 0) {
+      return <AccessRestricted />
+    }
+  
     if (!isLoggedIn) {
       return <SignIn />;
     }
