@@ -32,9 +32,9 @@ const sendEmail = async (emailData: SendEmailData): Promise<EmailResponse> => {
 }
 
 const sendEndorseExistingEmail = async (email: string, endorserId: string, endorserName: string) => {
-    const endorserProfileLink = `https://ghlab.io/profiles/0x${endorserId}`;
+    const endorserProfileLink = `https://ghlabs-io.vercel.app/profiles/0x${endorserId}`;
     const endorsementDate = new Date().toLocaleDateString();
-    const ctaLink = `https://ghlabs.io`;
+    const ctaLink = `https://ghlabs-io.vercel.app`;
 
     const emailContents = `<h1>Hello!,</h1>
   <h3>Great news! You've just been endorsed by another user on GameheadsLab. This endorsement helps increase the trust and authenticity within our community.</h3>
@@ -62,11 +62,9 @@ const sendEndorseExistingEmail = async (email: string, endorserId: string, endor
 }
 
 const sendInvitationEmail = async (email: string, endorserId: string, endorserName: string) => {
-    const endorserProfileLink = `https://app.hlabs.io/profiles/0x${endorserId}`;
+    const endorserProfileLink = `https://ghlabs-io.vercel.app/profiles/0x${endorserId}`;
+    const ctaLink = `https://ghlabs-io.vercel.app`;
     const endorsementDate = new Date().toLocaleDateString();
-    const ctaLink = `https://ghlabs.io`;
-    const aboutPageLink = `https://ghlabs.io/about`;
-    const linkedinLink = `https://www.linkedin.com/company/gameheads-oakland/`;
  
     const emailContents =
         `<h1>Hello!</h1>

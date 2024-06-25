@@ -17,7 +17,7 @@ const Dashboard = ({ projects, user, getProjects }: { getProjects: any, projects
                 email: '',
                 gameheadsID: '',
                 bio: '',
-                profile_picture: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                profile_picture: '/graphics/default-profile.png',
                 social_links: [],
                 projects: [],
                 other_links: [],

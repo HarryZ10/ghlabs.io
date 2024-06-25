@@ -196,7 +196,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                         }
                                         <div className="cursor-pointer mx-1"
                                             onClick={(e) => {
-                                                navigator.clipboard.writeText(`https://ghlabs.io/profiles/0x${profile.gameheadsID}`);
+                                                navigator.clipboard.writeText(`https://ghlabs-io.vercel.app/profiles/0x${profile.gameheadsID}`);
                                                 // toast.success("Public link copied to clipboard.");
                                             }}
                                         >
