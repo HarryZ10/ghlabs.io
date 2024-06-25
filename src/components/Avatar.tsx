@@ -20,20 +20,19 @@ const Avatar: React.FC<AvatarProps> = ({ size, src }) => {
     )
   `;
 
-    // Adjust the border width as needed
-    const borderWidth = 4; // for example, a 4px border
+    const borderWidth = 4;
 
     return (
         <div
             className="inline-flex justify-center items-center"
             style={{
-                width: `${width + borderWidth * 2}px`, // Include the border in the width
-                height: `${height + borderWidth * 2}px`, // Include the border in the height
-                backgroundColor: 'white', // This creates the white border effect
+                width: `${width + borderWidth * 2}px`,
+                height: `${height + borderWidth * 2}px`,
+                backgroundColor: 'white',
                 clipPath: clipPath,
                 WebkitClipPath: clipPath,
-                borderRadius: '0%', // Adjust as needed for the desired rounded corners
-                display: 'flex', // Ensures that the child div is centered
+                borderRadius: '0%',
+                display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
             }}
@@ -44,7 +43,7 @@ const Avatar: React.FC<AvatarProps> = ({ size, src }) => {
                     height: `${height}px`,
                     backgroundImage: `url(${src})`,
                     backgroundSize: 'cover',
-                    backgroundPosition: 'center', // Ensure the image is centered within the clip-path
+                    backgroundPosition: 'center',
                     clipPath: clipPath,
                     WebkitClipPath: clipPath,
                 }}

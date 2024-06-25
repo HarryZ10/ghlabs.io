@@ -54,7 +54,6 @@ const InviteModal: React.FC<InviteModalProps> = ({ user, profile, setProfile }) 
 
     const processEndorsement = async () => {
         try {
-            console.log(user)
             const response = await inviteUser({
                 endorsingUserGameheadsId: user.profile.gameheadsID,
                 endorsingUserEmail: user.profile.email,
@@ -72,7 +71,6 @@ const InviteModal: React.FC<InviteModalProps> = ({ user, profile, setProfile }) 
             }
 
         } catch (error) {
-            console.error(error);
             throw error;
         }
     };
@@ -109,7 +107,7 @@ const InviteModal: React.FC<InviteModalProps> = ({ user, profile, setProfile }) 
         >
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="endorsedUserEmail">User Email to Endorse:</label>
+                    <label htmlFor="endorsedUserEmail">Email</label>
                     <Input
                         id="endorsedUserEmail"
                         name="endorsedUserEmail"

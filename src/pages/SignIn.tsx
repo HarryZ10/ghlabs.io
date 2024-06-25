@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Button } from 'antd';
-import { useSession, signIn, signOut } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { GoogleOutlined } from '@ant-design/icons';
 
 const SignIn = () => {

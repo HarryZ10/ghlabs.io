@@ -105,16 +105,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 is_new_user: false,
             };
 
-            console.log("NEW PROFILE:", newProfile);
-
             await usersCollection.updateOne({ email: token.email }, { $set: { ...newProfile } });
+
+            console.log(`Updated profile for ${token.email} - ${token.name}`);
+            console.log(`${newProfile}`);
 
             return res.status(200).json({
                 message: `Updated profile for ${token.email}.`,
             });
 
         } catch (error) {
-            console.error("Error:", error);
             return res.status(500).json({ message: "Server error." });
         }
     }

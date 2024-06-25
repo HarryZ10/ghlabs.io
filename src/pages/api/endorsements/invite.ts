@@ -2,8 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
-import { getUserFromToken, getCollection, getDatabase, getConnectedClient, createUserFromEndorsement } from '../../../models/mongodb';
-import { ClientSession } from 'mongodb';
+import { getUserFromToken, getCollection, getConnectedClient, createUserFromEndorsement } from '../../../models/mongodb';
 
 interface InviteData {
     endorsingUserGameheadsId: string;

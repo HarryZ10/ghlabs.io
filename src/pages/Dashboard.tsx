@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ProfileView } from '../components/ProfileView';
-import AccessRestricted from '../components/utilities/AccessRestricted';
-import { set } from 'mongoose';
 
 const Dashboard = ({ projects, user, getProjects }: { getProjects: any, projects: any, user: any }) => {
     const [profile, setProfile] = useState<any>(null);
 
     useEffect(() => {
-        // console.log("User: " + JSON.stringify(user));
         if (user && user.profile) {
-            // console.log("Profile is" + JSON.stringify(user.profile));
             setProfile(user.profile);
         } else {
             setProfile({
@@ -33,7 +29,6 @@ const Dashboard = ({ projects, user, getProjects }: { getProjects: any, projects
         getProjects();
     }, [getProjects]);
 
-    // Only render once profile is not null and claims are available
     if (!profile || !projects) {
         return <div>Loading...</div>;
     }

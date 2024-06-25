@@ -12,9 +12,6 @@ export default NextAuth({
         strategy: "jwt",
         maxAge: 30 * 24 * 60 * 60, // 30 days
     },
-    // jwt: {
-    //   secret: process.env.JWT_SECRET as string,
-    // },
     callbacks: {
         async jwt({ token, user, account }) {
             // Initial sign in

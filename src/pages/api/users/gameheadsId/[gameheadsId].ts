@@ -13,19 +13,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         if (!token) {
             return res.status(401).json({
-                message: "Not authorized 1.",
+                message: "Not authorized, you're not signed in!",
             });
         }
         if (!token?.email) {
             return res.status(401).json({
-                message: "Not authorized 2.",
+                message: "Not authorized, please log in again!",
             });
         }
 
-        console.log(`Getting profile for ${req.query.gameheadsID}`);
         if (!req.query.gameheadsID) {
             return res.status(400).json({ message: 'Missing gameheads ID' });
         }
+
         const gameheadsID = req.query.gameheadsID;
         const userCollection = await getCollection('dev');
         const dbUser = await userCollection.findOne({ "gameheadsID": gameheadsID });

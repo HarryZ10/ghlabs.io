@@ -39,7 +39,6 @@ const getTeams = async () => {
 }
 
 const updateProfile = async (updateObject: UpdateProfileData) => {
-    console.log("UPDATING PROFILE: " + JSON.stringify(updateObject));
     return fetch(USERS_API_ENDPOINT, {
         method: 'PUT',
         headers: {

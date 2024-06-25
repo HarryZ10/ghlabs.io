@@ -7,7 +7,6 @@ type Data = {
     message: string;
 };
 
-// A simple type for the request body to ensure type safety.
 interface EmailRequestBody {
     to: string;
     subject: string;
@@ -23,8 +22,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         const { to, subject, html }: EmailRequestBody = req.body;
 
         const msg = {
-            to, // Recipient email address
-            from: process.env.EMAIL_SENDER || '', // Verified sender
+            to,
+            from: process.env.EMAIL_SENDER || '',
             subject,
             html,
         };
@@ -33,10 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
             await sgMail.send(msg);
             res.status(200).json({ message: 'Email sent successfully' });
         } catch (error) {
-            console.error(error);
-
             if (error instanceof Error) {
-                // Log more specific details of the error if available
                 console.error('Error sending email:', error.message);
                 return res.status(500).json({ message: 'Failed to send email' });
             }

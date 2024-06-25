@@ -1,13 +1,11 @@
 // src/sdk/emailAPI.ts
 
-// Define the request body type for sending emails
 interface SendEmailData {
     to: string;
     subject: string;
     html: string;
 }
 
-// Define the response type for the email-sending function
 interface EmailResponse {
     message: string;
 }

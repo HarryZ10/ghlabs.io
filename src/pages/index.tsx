@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import { Page } from "../models/models";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import Navbar from "../components/Navbar";
 import { useGameheadsContext } from "../context/context";
 import usersSDK from "../sdk/usersAPI";
@@ -14,8 +12,6 @@ import PresentationQueue from "./PresentationQueue";
 import IdentityCenter from "./IdentityCenter";
 import Onboard from "./Onboard";
 import AccessRestricted from "../components/utilities/AccessRestricted";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { data: session } = useSession();

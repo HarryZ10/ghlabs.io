@@ -16,9 +16,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const token = await getToken({ req });
 
-        // console.log(req.headers.cookie);
-        console.log(`Token: ${JSON.stringify(token)}`)
-
         if (!token || !token?.email) {
             return res.status(401).json({
                 message: "Not authorized. You must sign in.",

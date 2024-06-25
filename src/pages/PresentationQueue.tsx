@@ -1,7 +1,6 @@
 // src/components/PresentationQueue.tsx
 
 import React, { useState, useEffect } from 'react';
-import { MdExitToApp, MdGroup, MdPlayArrow, MdSave } from 'react-icons/md';
 import toast from 'react-hot-toast';
 import QueueActions from '../components/QueueActions';
 interface PresentationQueueProps {
@@ -150,7 +149,7 @@ const PresentationQueue: React.FC<PresentationQueueProps> = ({ user }) => {
             <h2 className="text-xl font-bold mb-4 capitalize">{color} - {location}</h2>
             {queues[color]?.length > 0 ? (
                 queues[color].map((queueItem, index) => {
-                    console.log("Loading queue items");
+                    console.log(`Rendering queue system: ${queueItem}`);
                     return (
                         <div
                             key={queueItem.currentTeamId}

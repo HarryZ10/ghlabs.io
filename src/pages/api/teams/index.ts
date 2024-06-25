@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getCollection, getTeamList, getUserFromToken } from '../../../models/mongodb';
+import { getTeamList } from '../../../models/mongodb';
 import { getToken } from "next-auth/jwt";
 
 export const config = {

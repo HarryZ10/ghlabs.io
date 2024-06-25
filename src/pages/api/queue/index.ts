@@ -10,9 +10,6 @@ export const config = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
         const queueCollection = await getCollection("queue");
-        const client = await getConnectedClient();
-        const session = client.startSession();
-
         const queue = await queueCollection.find().sort({ timestamp: 1 }).toArray();
         res.status(200).json(queue);
     } else {

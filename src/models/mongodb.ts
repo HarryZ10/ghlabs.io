@@ -63,18 +63,14 @@ export async function getConnectedClient() {
     }
 
     try {
-        // This will throw an error if not connected
         await client.db().command({ ping: 1 });
     } catch (error) {
-        console.log('Reconnecting to MongoDB...');
         await client.connect();
-        console.log('New MongoDB connection established');
 
         // Add SIGINT handler
         process.on('SIGINT', async () => {
             if (client) {
                 await client.close();
-                console.log('MongoDB connection closed');
             }
             process.exit(0);
         });
@@ -111,11 +107,10 @@ export async function getUserFromToken(token: any) {
             }
 
             user = await usersCollection.findOne({ email: token.email }, { session });
-            console.log(`Found user: ${JSON.stringify(user)}`);
 
             if (user) {
                 if (!user.auth_provider || user.auth_provider.length === 0) {
-                    console.log(`Updating user for ${token.email}`);
+                    
                     await usersCollection.updateOne(
                         { email: token.email },
                         {
@@ -130,7 +125,6 @@ export async function getUserFromToken(token: any) {
                 }
             } else {
                 // create user
-                console.log(`Creating user for ${token.email}`);
                 const uniqueId = await getUniqueIdentifier(usersCollection, session);
                 const newUser = {
                     email: token.email,
@@ -162,7 +156,6 @@ export async function getUserFromToken(token: any) {
 
         return user;
     } catch (error) {
-        console.error('Error in getUserFromToken:', error);
         return null;
     } finally {
         await session.endSession();
@@ -188,7 +181,7 @@ export async function createUserFromEndorsement(email: string, endorserId: strin
 
             if (!user) {
                 const uniqueId = await getUniqueIdentifier(usersCollection, session);
-                console.log(`Creating user for ${email}`);
+
                 const newUser = {
                     email: email,
                     auth_provider: null,
