@@ -1,11 +1,7 @@
 
 import React from 'react';
-import { Card, Avatar, Button, Layout, Empty, Carousel, List, Space } from 'antd';
-import { useState, useEffect, use } from 'react';
-import Head from 'next/head';
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { LinkedinOutlined, ExportOutlined, CloseOutlined } from '@ant-design/icons';
 import Navbar from '../../components/Navbar';
 import { useGameheadsContext } from "../../context/context";
 import { ProfileView } from '../../components/ProfileView';
