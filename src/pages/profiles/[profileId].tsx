@@ -12,8 +12,14 @@ const Profile = () => {
     const { profileId } = router.query;
     const [profile, setProfile] = useState<any>();
 
-    const { setCurrentPage, currentPage,
-        setIsLoggedIn, isLoggedIn, setUser, user } = useGameheadsContext();
+    const {
+        setCurrentPage,
+        currentPage,
+        setIsLoggedIn,
+        isLoggedIn,
+        setUser,
+        user
+    } = useGameheadsContext();
  
     const getProfile = async (gameheadsId: string) => {
         const data = await usersSDK.getUserByGameheadsId(gameheadsId);
